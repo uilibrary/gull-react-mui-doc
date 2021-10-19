@@ -1,0 +1,29 @@
+## Breadcrumb
+
+You need to import Breadcrumb in you current component.
+Breadcrumb depend on following props
+
+- `name` - It contain the page name
+- `subName` - It contain the component name of current page
+- `path` - It contain the any component path
+
+### Example
+
+```tsx
+import { FC } from 'react'
+import Breadcrumb from './components/breadcrumb/Breadcrumb'
+
+const Component: FC = () => {
+  return (
+    <>
+      <Breadcrumb
+        name="page name"
+        subName="component name of current page"
+        path="any component path"
+      />
+    </>
+  )
+}
+
+export default Component
+```

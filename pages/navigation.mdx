@@ -1,0 +1,37 @@
+## Navigation
+
+Navigation can be achieved in multiple ways, depending on your app needs. Under the hood, all navigation strategies use the history provider.
+
+### Navigation via link
+
+```tsx
+import { Link } from 'react-router-dom'
+
+const Home = () => {
+  return (
+    <div>
+      <Link to="/dashboard">Go to Dashboard</Link>
+    </div>
+  )
+}
+```
+
+### Navigation via hook
+
+```tsx
+import { useNavigate } from 'react-router-dom'
+
+const Home = () => {
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    navigate('/dashboard')
+  }
+
+  return (
+    <div>
+      <button onClick={handleClick}>Go to Dashboard</button>
+    </div>
+  )
+}
+```

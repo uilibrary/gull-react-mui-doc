@@ -1,0 +1,94 @@
+## Auth Guard
+
+This is a simple component that can be used to protect a private route. It controls whether it should allow navigation to a requested route based on given context.
+
+### Implementation
+
+open `src/component/AuthGuard.tsx` file then write following code
+
+### Example
+
+```tsx
+import { FC, ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
+import useAuth from '../../custom-hooks/useAuth'
+
+interface Props {
+  children: ReactNode
+}
+const AuthGuard: FC<Props> = ({ children }) => {
+  const Redirect = useNavigate()
+  const { isAuthenticated } = useAuth()
+  let authenticated = isAuthenticated
+
+  return <>{authenticated ? children : Redirect('/session/signin')}</>
+}
+
+export default AuthGuard
+```
+
+### How it works
+
+open `src/routes.tsx` file then write following code
+
+### Example
+
+```tsx
+import { lazy, Suspense } from "react";
+import Loading from "../components/loading/Loading";
+import AuthGuard from "../components/auth/AuthGuard";
+
+const Loadable = (Component: any) => (props: any) =>
+  (
+    <Suspense fallback={<Loading />}>
+      <Component {...props} />
+    </Suspense>
+  );
+
+// Dashboard page
+const DashboardLayout = Loadable(
+  lazy(() => import("../Layouts/DashboardLayout"))
+);
+
+// authentication pages
+const Signin = Loadable(lazy(() => import("../pages/sessions/Signin")));
+const Signup = Loadable(lazy(() => import("../pages/sessions/Signup")));
+const ForgotPassword = Loadable(
+  lazy(() => import("../pages/sessions/ForgotPassword"))
+);
+
+// routes
+export const all_routes = [
+  {
+    path: "/",
+    element: (
+      <AuthGuard>
+        <DashboardLayout />
+      </AuthGuard>
+    ),
+    children: [
+        here will be children components
+    ]
+  },
+  {
+    path: "/session/signin",
+    element: <Signin />,
+  },
+  {
+    path: "/session/signup",
+    element: <Signup />,
+  },
+  {
+    path: "/session/forgot-password",
+    element: <ForgotPassword />,
+  },
+  {
+    path: "/session/404",
+    element: <NotFound />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+];
+```

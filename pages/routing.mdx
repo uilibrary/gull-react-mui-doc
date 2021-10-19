@@ -1,0 +1,82 @@
+## Routing
+
+### Implementation
+
+To control the navigation and linking between components the app uses `react-router` and `react-router-dom` libraries.
+
+At first You need to import all_route from `src/routes/routes` folder. then you can use it in your app component
+
+### Routes file
+
+```tsx
+import { lazy, Suspense } from "react";
+import Loading from "../components/loading/Loading";
+
+const Loadable = (Component: any) => (props: any) =>
+  (
+    <Suspense fallback={<Loading />}>
+      <Component {...props} />
+    </Suspense>
+  );
+
+// Dashboard page
+const DashboardLayout = Loadable(
+  lazy(() => import("../Layouts/DashboardLayout"))
+);
+
+// authentication pages
+const Signin = Loadable(lazy(() => import("../pages/sessions/Signin")));
+const Signup = Loadable(lazy(() => import("../pages/sessions/Signup")));
+const ForgotPassword = Loadable(
+  lazy(() => import("../pages/sessions/ForgotPassword"))
+);
+
+// routes
+export const all_routes = [
+  {
+    path: "/",
+    element: <DashboardLayout />,
+    children: [
+        here will be children components
+    ]
+  },
+  {
+    path: "/session/signin",
+    element: <Signin />,
+  },
+  {
+    path: "/session/signup",
+    element: <Signup />,
+  },
+  {
+    path: "/session/forgot-password",
+    element: <ForgotPassword />,
+  },
+  {
+    path: "/session/404",
+    element: <NotFound />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+];
+```
+
+### Route Integration
+
+```tsx
+import React from 'react'
+import { all_routes } from './routes/routes'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
+const App: React.FC = () => {
+  const app_pages = useRoutes(all_routes)
+
+  return (
+    <BrowserRouter>
+      <Routes>{app_pages}</Routes>
+    </BrowserRouter>
+  )
+}
+```

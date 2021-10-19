@@ -1,0 +1,65 @@
+## Server Calls
+
+You can use any library you like. The app uses Axios since it allows you to create instances. Another good alternative could be Fetch.
+
+### _Important_
+
+_If you use axios from src/utils/axios.js, this instance is being intercepted by the MockAdapter. This means that all your requests made using it will be blocked the by the adapter. In this situation, for server API requests, and you might get a 404 status code (or other error codes) in your console, because the adapter is not able to find the specified URL._
+
+### Example
+
+```tsx
+const login = async (email: string, password: string) => {
+  const response: any = await axios.post('/api/auth/login', {
+    email,
+    password,
+  })
+  console.log(response)
+}
+```
+
+### Request interceptors
+
+By using Axios you are able to integrate Axios Mock Adapter to simulate real server calls. To archive that, you have to create an Axios instance and use it whenever you make a request call. Now you can extend your instance and add Axios Mock Adapter to listen for requests and return custom data.\
+
+```tsx
+Mock.onPost('/api/auth/login').reply(async (config: any) => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
+    const { email } = JSON.parse(config.data)
+    const user = userList.find((u) => u.email === email)
+
+    if (!user) {
+      return [400, { message: 'Invalid email or password' }]
+    }
+    const accessToken = jwt.sign({ userId: user.id }, JWT_SECRET, {
+      expiresIn: JWT_VALIDITY,
+    })
+
+    return [
+      200,
+      {
+        accessToken,
+        user: {
+          id: user.id,
+          avatar: user.avatar,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+        },
+      },
+    ]
+  } catch (err) {
+    console.error(err)
+    return [500, { message: 'Internal server error' }]
+  }
+})
+```
+
+### Removing existing request interceptors
+
+There are two ways:
+
+1. Simply use a new axios instance.
+2. Remove the src/fake-db folder and uninstall axios-mock-adapter dependency.

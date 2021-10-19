@@ -1,0 +1,10 @@
+{
+  "index": "Introduction",
+  "get-started": "Get Started",
+  "features": "Features",
+  "authentication": "JWT Authentication",
+  "routing": "Routing",
+  "navigation": "Navigation",
+  "mockserver": "Mock Server",
+  "folder-structure": "Folder Structure"
+}

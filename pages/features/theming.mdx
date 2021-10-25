@@ -1,0 +1,47 @@
+## Creating a theme
+
+The app allows you to choose between multiple theme setups, thus a wrapper was created over the gullTheme. Currently, the function accepts a configuration object with the following keys. So you have import gullTheme at top of app component:
+
+- `direction [ 'ltr' | 'rtl' ]` - Sets the theme direction. If you need RTL support, please ensure you use RTL component.
+- `responsiveFontSizes [ boolean ]` - Adaptive font size for small devices.
+- `roundedCorners [ boolean ]` - Increase the default border radius to 16px.
+- `theme [ 'LIGHT' | 'DARK' ]` - Select a specific theme configuration. You can add your own styling or adjust current options.
+
+### Example
+
+```tsx
+import './fake-db'
+import { FC } from 'react'
+import RTL from './components/RTL'
+import { gullTheme } from './theme'
+import { ThemeProvider } from '@mui/system'
+import { CssBaseline } from '@mui/material'
+import { useRoutes } from 'react-router-dom'
+import { all_routes } from './routes/routes'
+import { CommonContextProvider } from './contexts/CommonContext'
+
+const App: FC = () => {
+  const all_pages = useRoutes(all_routes)
+
+  // App theme
+  const theme = gullTheme({
+    theme: darkMode || 'LIGHT',
+    direction: isRtl || 'ltr',
+    roundedCorners: true,
+    responsiveFontSizes: true,
+  })
+
+  return (
+    <CommonContextProvider>
+      <ThemeProvider theme={theme}>
+        <RTL direction={theme.direction}>
+          <CssBaseline />
+          {all_pages}
+        </RTL>
+      </ThemeProvider>
+    </CommonContextProvider>
+  )
+}
+
+export default App
+```

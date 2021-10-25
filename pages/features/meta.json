@@ -1,5 +1,6 @@
 {
   "RTL": "RTL",
+  "theming": "Theming",
   "Breadcrumb": "Breadcrumb",
   "auth-guard": "Auth Guard"
 }
